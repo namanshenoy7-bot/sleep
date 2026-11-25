@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Sleep Tracker</title>
+  <meta name="theme-color" content="#0d0b1e" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Sleep" />
+  <meta name="format-detection" content="telephone=no" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" href="icons/icon-192.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="top">
+      <h1>Sleep</h1>
+      <span id="clock" class="muted"></span>
+    </header>
+
+    <section class="grid3 top-cards">
+      <div class="card debt" id="debtCard">
+        <div class="label">Sleep debt</div>
+        <div class="big" id="debtValue">--</div>
+        <div class="badge" id="debtBadge"></div>
+        <div class="muted small" id="debtNote"></div>
+      </div>
+      <div class="card">
+        <div class="label">Last sleep</div>
+        <div class="big" id="lastValue">--</div>
+        <div class="muted small" id="lastNote"></div>
+      </div>
+      <div class="card">
+        <div class="label">Tonight's bedtime</div>
+        <div class="big" id="bedValue">--</div>
+        <div class="muted small" id="bedNote"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="row between">
+        <div>
+          <div class="label">Right now</div>
+          <div class="phase-now" id="phaseNow">--</div>
+          <div class="muted small" id="phaseHint"></div>
+        </div>
+        <button id="sleepToggle" class="primary"></button>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="label">Energy schedule</div>
+      <svg id="energyChart" viewBox="0 0 640 200" role="img" aria-label="Estimated energy across your day"></svg>
+      <ul class="phases" id="phaseList"></ul>
+      <p class="muted small">Estimated from your typical wake time (<span id="wakeUsed"></span>) and sleep debt. Higher debt flattens the peaks.</p>
+    </section>
+
+    <section class="card">
+      <div class="label">Last 14 days</div>
+      <svg id="historyChart" viewBox="0 0 640 200" role="img" aria-label="Hours slept over the last 14 days"></svg>
+      <div class="grid3 stats" id="stats"></div>
+    </section>
+
+    <section class="card">
+      <div class="label" id="formTitle">Log a sleep</div>
+      <form id="logForm" class="form">
+        <label>Woke up on <input type="date" id="fDate" required /></label>
+        <label>Bedtime <input type="time" id="fBed" required /></label>
+        <label>Wake time <input type="time" id="fWake" required /></label>
+        <div class="row">
+          <button type="submit" class="primary" id="fSubmit">Add</button>
+          <button type="button" id="fCancel" hidden>Cancel</button>
+        </div>
+      </form>
+      <div class="error" id="formError" role="alert"></div>
+    </section>
+
+    <section class="card">
+      <div class="label">History</div>
+      <ul class="history" id="historyList"></ul>
+    </section>
+
+    <section class="card">
+      <div class="label">Settings</div>
+      <div class="form">
+        <label>Sleep need
+          <select id="needSelect"></select>
+        </label>
+      </div>
+      <div class="row wrap">
+        <button id="exportBtn">Export data</button>
+        <label class="button">Import data<input type="file" id="importFile" accept="application/json" hidden /></label>
+        <button id="clearBtn" class="danger">Delete all data</button>
+      </div>
+      <p class="muted small">Your data is stored only on this device and never uploaded. Export a backup now and then (on iPhone: Export, then Save to Files).</p>
+    </section>
+  </main>
+
+  <script src="sleep-core.js"></script>
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+      navigator.serviceWorker.register('sw.js').catch((e) => console.warn('Offline mode unavailable:', e));
+    }
+  </script>
+</body>
+</html>
